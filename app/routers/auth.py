@@ -35,7 +35,7 @@ async def sign_in(user: UserIn, session: get_db_session):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Incorrect password")
 
     expires_delta = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
-    access_token = create_access_token(data={"sub": db_user.id}, expires_delta=expires_delta)
+    access_token = create_access_token(data={"sub": str(db_user.id)}, expires_delta=expires_delta)
 
     return {
         "message": "User signed in successfully",

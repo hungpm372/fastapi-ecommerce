@@ -19,3 +19,9 @@ async def create_user(user: UserCreate, db: AsyncSession) -> User:
 async def get_user_by_email(email: str, db: AsyncSession) -> User:
     user = (await db.scalars(select(User).where(User.email == email))).first()
     return user
+
+
+# Get a user by ID
+async def get_user_by_id(user_id: int, db: AsyncSession) -> User:
+    user = (await db.scalars(select(User).where(User.id == user_id))).first()
+    return user
