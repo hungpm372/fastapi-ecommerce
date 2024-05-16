@@ -30,7 +30,7 @@ async def create_order(order: OrderCreate, session: get_db_session, user_id: int
         product_db.stock_quantity -= order_item.quantity
 
     new_order = await OrderCRUD.create_order(order, session, user_id)
-    print(new_order)
+
     return dict(
         message="Order created successfully",
         status_code=status.HTTP_200_OK

@@ -1,6 +1,6 @@
 from enum import Enum
 
-from sqlalchemy import Column, Integer, ForeignKey, Enum as SQLEnum
+from sqlalchemy import Column, Integer, ForeignKey
 from sqlalchemy.dialects import postgresql
 from sqlalchemy.orm import relationship
 

@@ -1,9 +1,10 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.crud.payment import PaymentCRUD
 from app.crud.product import ProductCRUD
 from app.models import Order
 from app.models.Order import OrderItem
-from app.schemas import OrderCreate
+from app.schemas import OrderCreate, PaymentCreate
 
 
 class OrderCRUD:
@@ -24,11 +25,14 @@ class OrderCRUD:
         await db.commit()
         await db.refresh(new_order)
 
+        await PaymentCRUD.create_payment(
+            PaymentCreate(amount=total_price, user_id=user_id, payment_method=order.payment_method), db)
+
         # Create order items
-        order_items = []
+        items = []
         for order_item in order.order_items:
-            order_items.append(OrderItem(product_id=order_item.product_id, order_id=new_order.id,
-                                         quantity=order_item.quantity))
-        db.add_all(order_items)
+            items.append(OrderItem(product_id=order_item.product_id, order_id=new_order.id,
+                                   quantity=order_item.quantity))
+        db.add_all(items)
         await db.commit()
         return new_order

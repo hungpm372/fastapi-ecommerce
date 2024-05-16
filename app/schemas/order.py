@@ -1,5 +1,7 @@
 from pydantic import BaseModel, ConfigDict
 
+from app.models.Payment import PaymentMethod
+
 
 class OrderItemBase(BaseModel):
     product_id: int
@@ -18,6 +20,7 @@ class OrderBase(BaseModel):
 
 class OrderCreate(OrderBase):
     order_items: list[OrderItemCreate]
+    payment_method: PaymentMethod = PaymentMethod.CREDIT_CARD
 
 
 class OrderOut(OrderBase):
