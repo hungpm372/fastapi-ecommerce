@@ -12,7 +12,10 @@ class UserCreate(UserBase):
 
 
 class UserUpdate(UserBase):
-    password: str
+    first_name: str | None = None
+    last_name: str | None = None
+    phone: str | None = None
+    address: str | None = None
 
 
 class UserIn(UserBase):

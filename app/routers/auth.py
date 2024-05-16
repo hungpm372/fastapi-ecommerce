@@ -2,7 +2,7 @@ from datetime import timedelta
 
 from fastapi import APIRouter, status, HTTPException
 from app.configs import get_settings, get_db_session
-from app.crud.user import get_user_by_email, create_user
+from app.crud.user import UserCRUD
 from app.schemas import UserCreate, UserIn, UserOut
 from app.utils.jwt_utils import create_access_token
 from app.utils.password_utils import verify_password
@@ -13,11 +13,11 @@ router = APIRouter()
 
 @router.post('/sign-up')
 async def sign_up(user: UserCreate, session: get_db_session):
-    db_user = await get_user_by_email(user.email, session)
+    db_user = await UserCRUD.get_user_by_email(user.email, session)
     if db_user:
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Email already registered")
 
-    new_user = await create_user(user, session)
+    new_user = await UserCRUD.create_user(user, session)
     return dict(
         message="User created successfully",
         status_code=status.HTTP_201_CREATED,
@@ -27,7 +27,7 @@ async def sign_up(user: UserCreate, session: get_db_session):
 
 @router.post('/sign-in')
 async def sign_in(user: UserIn, session: get_db_session):
-    db_user = await get_user_by_email(user.email, session)
+    db_user = await UserCRUD.get_user_by_email(user.email, session)
     if not db_user:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
 

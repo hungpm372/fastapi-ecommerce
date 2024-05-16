@@ -2,7 +2,7 @@ from fastapi import APIRouter, status, HTTPException, Depends
 from app.configs import get_settings, get_db_session
 from app.crud.order import OrderCRUD
 from app.crud.product import ProductCRUD
-from app.crud.user import get_user_by_id
+from app.crud.user import UserCRUD
 from app.schemas import OrderCreate, OrderOut
 from app.utils.jwt_utils import get_current_user
 
@@ -12,7 +12,7 @@ router = APIRouter()
 
 @router.post("")
 async def create_order(order: OrderCreate, session: get_db_session, user_id: int = Depends(get_current_user)):
-    user_db = await get_user_by_id(user_id, session)
+    user_db = await UserCRUD.get_user_by_id(user_id, session)
     if not user_db:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
 
